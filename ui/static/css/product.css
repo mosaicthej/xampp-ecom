@@ -1,0 +1,9 @@
+.card-price {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* give `deleteProductBtn` a read background */
+#deleteProductBtn {
+    background-color: #f8f9fa;
+}
