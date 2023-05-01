@@ -19,27 +19,27 @@
                     <h3 class="text-center my-3">Ecommerce Platform</h3>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="dashboard.html">
+                            <a class="nav-link" href="dashboard.php">
                                 Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="category.html">
+                            <a class="nav-link" href="category.php">
                                 Category
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="product.html">
+                            <a class="nav-link" href="product.php">
                                 Products
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="uses.html">
+                            <a class="nav-link" href="uses.php">
                                 Users
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="order.html">
+                            <a class="nav-link" href="order.php">
                                 Orders
                             </a>
                         </li>
