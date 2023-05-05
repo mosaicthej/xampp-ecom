@@ -3,7 +3,7 @@ session_start();
 
 // Redirect to dashboard if the user is already logged in
 if (isset($_SESSION['username'])) {
-    header('Location: dashboard.php');
+    header('Location: ./dashboard');
     exit();
 }
 
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Set the session variables and redirect to dashboard
             $_SESSION['username'] = $user['username'];
             $_SESSION['id'] = $user['id'];
-            header('Location: dashboard.php');
+            header('Location: ./dashboard');
             exit();
         } else {
             $error = "Incorrect password.";
