@@ -40,8 +40,8 @@
 				for ($i = 0; $i < count($nav_pages); $i++) {
 					$nav_page = $nav_pages[$i];
 					$nav_name = $nav_names[$i];
-					$active = ($nav_page == $page) ? 'active' : '';
-					echo "<li class='nav-item'>
+					$active = ($nav_page == $page) ? 'active text-primary bg-gray' : 'text-dark';
+					echo "<li class='nav-item $active'>
 						<a class='nav-link $active' href='../$nav_page' id='$nav_page"."Link'>
 							$nav_name
 						</a>

@@ -1,6 +1,7 @@
 <?php
 // Start session
 session_start();
+$page = "dashboard";
 
 // Check if the user is logged in
 if (!isset($_SESSION['username'])) {
