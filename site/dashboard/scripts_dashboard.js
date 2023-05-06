@@ -92,10 +92,10 @@ $(document).ready(function () {
                     showToast("Error updating user info.", "error");
                 }
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error details: ", textStatus, errorThrown);
                 showToast("An error occurred while processing the request.", "error");
-              }              
+            }
         });
     });
 });
@@ -109,6 +109,66 @@ function updateUserInfoCard(user) {
         $("#userDefaultAddress").text(user.default_address);
     }
 }
+
+
+/*
+*   For user address management
+*/
+function fetchUserAddresses() {
+    $.ajax({
+        type: "GET",
+        url: "../includes/fetch_user_address.php",
+        /*
+         upon a GET request, the PHP script will return a JSON like this:
+         {'default_usr_addr_id' => <id in user_address that is user's default address>,
+          'addresses' => [ ## an array of addresses]
+         }     
+         
+         when checking for the match in default address,
+            for each `address` in `addresses`:
+                if address.usr_addr_id == default_usr_addr_id:
+                    address is the default address
+        */
+        dataType: "json",
+        success: function (response) {
+            // Populate the addresses list with the fetched addresses
+            const default_usr_addr_id = response.default_usr_addr_id;
+            const addresses = response.addresses;
+            $("#addressesList").empty();
+            addresses.forEach(function (address) {
+                console.log(JSON.stringify(address));
+                // Check if the current address is the default address
+                const isChecked = address.usr_addr_id == default_usr_addr_id;
+                const addressItem = `
+                    <li class="list-group-item">
+                        <div class="address-item">
+                            <input type="radio" name="default_address" value="${address.usr_addr_id}" ${isChecked ? 'checked' : ''} />
+                            <label>
+                                ${address.contact_name}, ${address.contact_phone}, ${address.contact_email}.\n\n
+                                Apartment: ${address.apartment_no}, Street: ${address.streetno} ${address.street},\n\n
+                                City: ${address.city}, Region: ${address.region}, Country: ${address.country}, \n
+                                Postal Code: ${address.postal_code}
+                            </label>
+                            <span class="delete-address" data-address-id="${address.usr_addr_id}">
+                                <i class="fas fa-trash"></i>
+                            </span>
+                        </div>
+                    </li>
+                `;
+                $("#addressesList").append(addressItem);
+            });
+        },
+        error: function () {
+            // Handle errors (e.g., show an error message)
+        },
+    });
+}
+$("#manageAddressesModal").on("shown.bs.modal", function () {
+    fetchUserAddresses();
+});
+
+// You can add event listeners for the edit, delete, and add new address buttons here
+
 function fetchCountries() {
     $.ajax({
         type: "GET",
