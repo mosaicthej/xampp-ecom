@@ -140,23 +140,26 @@ function fetchUserAddresses() {
                 // Check if the current address is the default address
                 const isChecked = address.usr_addr_id == default_usr_addr_id;
                 const addressItem = `
-                    <li class="list-group-item">
-                        <div class="address-item">
-                            <input type="radio" name="def_ua_id" value="${address.usr_addr_id}" ${isChecked ? 'checked' : ''} />
-                            <label>
-                                ${address.contact_name}, ${address.contact_phone}, ${address.contact_email}.\n\n
-                                Apartment: ${address.apartment_no}, Street: ${address.streetno} ${address.street},\n\n
-                                City: ${address.city}, Region: ${address.region}, Country: ${address.country}, \n
-                                Postal Code: ${address.postal_code}
-                            </label>
-                            <span class="delete-address" data-uaid="${address.usr_addr_id}">
-                                <i class="fas fa-trash"></i>
-                            </span>
-                        </div>
-                    </li>
-                `;
+                <li class="list-group-item">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="def_ua_id" id="def_ua_id_${address.usr_addr_id}" value="${address.usr_addr_id}" ${isChecked ? 'checked' : ''}>
+                        <label class="form-check-label" for="def_ua_id_${address.usr_addr_id}">
+                            <strong>${address.contact_name}, ${address.contact_phone}, ${address.contact_email}.</strong><br>
+                            Apartment: ${address.apartment_no}, Street: ${address.streetno} ${address.street},<br>
+                            City: ${address.city}, Region: ${address.region}, Country: ${address.country},<br>
+                            Postal Code: ${address.postal_code}
+                        </label>
+                    </div>
+                    <button class="btn btn-danger delete-address" data-address-id=${address.usr_addr_id} onclick="handle_addr_del(${address.usr_addr_id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </li>
+        `;
                 $("#addressesList").append(addressItem);
             });
+            handle_addr_del();
         },
         error: function () {
             // Handle errors (e.g., show an error message)
@@ -188,6 +191,29 @@ $("#addressListForm").submit(function (e) {
 $("#manageAddressesModal").on("shown.bs.modal", function () {
     fetchUserAddresses();
 });
+
+function handle_addr_del(addressId) {
+    $(".delete-address").click(function () {
+
+        $.ajax({
+            type: "POST",
+            url: "process_delete_user_addr.php",
+            data: { ua_id: addressId },
+            success: function (response) {
+                // show a success message (like a toast that fades out after 2 seconds)
+                // Remove the deleted address from the DOM
+                $(`.delete-address[data-address-id="${addressId}"]`).closest(".address-item").remove();
+                showToast("Address deleted successfully.", "success");
+            },
+            error: function () {
+                showToast("Error deleting address.", "error");
+                // Handle errors (e.g., show an error message)
+            },
+        });
+    });
+    console.log("loaded listner for delete address");
+}
+
 
 // You can add event listeners for the edit, delete, and add new address buttons here
 
