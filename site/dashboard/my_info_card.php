@@ -42,13 +42,29 @@
 							SELECT idAddress FROM user_address WHERE id = ? )";
 					
 					$addr_stmt = $conn->prepare($addr_query);
-					$addr_row = $addr_stmt->execute([$def_addr_id]);
+					$addr_stmt->execute([$def_addr_id]);
 					$addr_row = $addr_stmt->fetch(PDO::FETCH_ASSOC);
+					
+					// $city_info: getting `city`, `region`, `country` by getting the `name` field 
+						// from table `cities`, `regions`, `countries` respectively
+					$city_info = [];
+					$city_stmt = $conn->prepare("SELECT name FROM cities WHERE id = ?");
+					$city_stmt -> execute([$addr_row['city_id']]);
+					$city_info['city'] = $city_stmt->fetchColumn();
+
+					$region_stmt = $conn->prepare("SELECT name FROM regions WHERE id = ?");
+					$region_stmt -> execute([$addr_row['region_id']]);
+					$city_info['region'] = $region_stmt->fetchColumn();
+
+					$country_stmt = $conn->prepare("SELECT name FROM countries WHERE id = ?");
+					$country_stmt -> execute([$addr_row['country_id']]);
+					$city_info['country'] = $country_stmt->fetchColumn();
+				
 					$addr_stmt->closeCursor();
 
 					echo "<p>Default Address: <span id='userDefaultAddress' class='mr-2' style='font-weight: bold;'>" 
 						. $addr_row['apartment_no'] . " " . $addr_row['streetno'] . " " . $addr_row['street'] . "\n"
-						. $addr_row['city'] . ", " . $addr_row['province'] . ", " . $addr_row['country'] . "\n"
+						. $city_info['city'] . ", " . $city_info['region'] . ", " . $city_info['country'] . "\n"
 						. $addr_row['postal_code'] . "</span></p>";
 				}
 				?>
@@ -57,6 +73,17 @@
 				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateUserInfoModal">
 					<i class="fas fa-pencil-alt"></i>
 				</button>
+				
+				<?php require_once './modal_manage_address.php';?>
+				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#manageAddressesModal">
+					<i class="fas fa-compass"></i>
+				</button>
+				
+				<?php require_once './modal_add_address.php'; ?>
+				<button id="addNewAddressBtn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAddressModal">
+					<i class="fas fa-plus"></i>
+				</button>
+
 			</div>
 		</div>
 	</div>
