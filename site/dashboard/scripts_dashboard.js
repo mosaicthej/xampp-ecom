@@ -142,14 +142,14 @@ function fetchUserAddresses() {
                 const addressItem = `
                     <li class="list-group-item">
                         <div class="address-item">
-                            <input type="radio" name="default_address" value="${address.usr_addr_id}" ${isChecked ? 'checked' : ''} />
+                            <input type="radio" name="def_ua_id" value="${address.usr_addr_id}" ${isChecked ? 'checked' : ''} />
                             <label>
                                 ${address.contact_name}, ${address.contact_phone}, ${address.contact_email}.\n\n
                                 Apartment: ${address.apartment_no}, Street: ${address.streetno} ${address.street},\n\n
                                 City: ${address.city}, Region: ${address.region}, Country: ${address.country}, \n
                                 Postal Code: ${address.postal_code}
                             </label>
-                            <span class="delete-address" data-address-id="${address.usr_addr_id}">
+                            <span class="delete-address" data-uaid="${address.usr_addr_id}">
                                 <i class="fas fa-trash"></i>
                             </span>
                         </div>
@@ -163,6 +163,28 @@ function fetchUserAddresses() {
         },
     });
 }
+
+$("#addressListForm").submit(function (e) {
+    e.preventDefault();
+    console.log("clicked submit on addressListForm");
+    const default_ua_id = $('input[name="def_ua_id"]:checked').val();
+
+    $.ajax({
+        type: "POST",
+        url: "process_update_default_address.php",
+        data: { def_ua_id: default_ua_id },
+        success: function (response) {
+            // show a success message (like a toast that fades out after 2 seconds)
+            showToast("Default address updated successfully.", "success");
+            $("#manageAddressesModal").modal("hide");
+        },
+        error: function () {
+            // Handle errors (e.g., show an error message)
+            showToast("Error updating default address.", "error");
+        },
+    });
+});
+
 $("#manageAddressesModal").on("shown.bs.modal", function () {
     fetchUserAddresses();
 });

@@ -12,12 +12,12 @@
 					<ul id="addressesList" class="d-flex flex-wrap">
 					<!-- The user's addresses will be populated here -->
 					</ul>
-				</form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button id="saveAddressesBtn" type="button" class="btn btn-primary">Save changes</button>
-      </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button id="saveAddressesBtn" type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
