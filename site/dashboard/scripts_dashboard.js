@@ -109,3 +109,118 @@ function updateUserInfoCard(user) {
         $("#userDefaultAddress").text(user.default_address);
     }
 }
+function fetchCountries() {
+    $.ajax({
+        type: "GET",
+        url: "../includes/fetch_countries.php",
+        dataType: "json",
+        success: function (countries) {
+            countries.forEach(function (country) {
+                $("#country").append(
+                    $("<option>", {
+                        value: country.id,
+                        text: country.name,
+                    })
+                );
+            });
+        },
+        error: function () {
+            // Handle errors (e.g., show an error message)
+        },
+    });
+}
+
+function fetchRegions(country_id) {
+    $.ajax({
+        type: "GET",
+        url: "../includes/fetch_regions.php",
+        data: { country_id: country_id },
+        dataType: "json",
+        success: function (regions) {
+            $("#region").empty().append($('<option>', { value: '', text: 'Select a region' }));
+            regions.forEach(function (region) {
+                $("#region").append(
+                    $("<option>", {
+                        value: region.id,
+                        text: region.name,
+                    })
+                );
+            });
+        },
+        error: function () {
+            // Handle errors (e.g., show an error message)
+        },
+    });
+}
+
+function fetchCities(region_id) {
+    $.ajax({
+        type: "GET",
+        url: "../includes/fetch_cities.php",
+        data: { region_id: region_id },
+        dataType: "json",
+        success: function (cities) {
+            $("#city").empty().append($('<option>', { value: '', text: 'Select a city' }));
+            cities.forEach(function (city) {
+                $("#city").append(
+                    $("<option>", {
+                        value: city.id,
+                        text: city.name,
+                    })
+                );
+            });
+        },
+        error: function () {
+            // Handle errors (e.g., show an error message)
+        },
+    });
+}
+
+$(document).ready(function () {
+    fetchCountries();
+
+    $("#country").on("change", function () {
+        const country_id = $(this).val();
+        if (country_id) {
+            fetchRegions(country_id);
+        } else {
+            $("#region").empty().append($('<option>', { value: '', text: 'Select a region' }));
+            $("#city").empty().append($('<option>', { value: '', text: 'Select a city' }));
+        }
+    });
+
+    $("#region").on("change", function () {
+        const region_id = $(this).val();
+        if (region_id) {
+            fetchCities(region_id);
+        } else {
+            $("#city").empty().append($('<option>', { value: '', text: 'Select a city' }));
+        }
+    });
+});
+
+// handling add new address form submission
+$(document).ready(function () {
+    $("#addAddressForm").on("submit", function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: "./process_add_address.php",
+            data: $(this).serialize(),
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    showToast("Address added successfully.", "success");
+                    $("#addAddressModal").modal("hide");
+                } else {
+                    showToast("Error adding address.", "error");
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log("Error details: ", textStatus, errorThrown);
+                showToast("An error occurred while processing the request.", "error");
+            }
+        });
+    });
+});
