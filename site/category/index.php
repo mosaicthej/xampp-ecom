@@ -31,6 +31,10 @@ $page = 'category';
                                 <label for="categoryName">Category Name:</label>
                                 <input type="text" class="form-control" id="categoryName" placeholder="Enter category name" name="categoryName" required>
                             </div>
+                            <div class="form-group">
+                                <label for="categoryDesc">Category Description:</label>
+                                <textarea class="form-control" id="categoryDesc" placeholder="Enter category description" name="categoryDesc" required></textarea>
+                            </div>
                             <button type="submit" class="btn btn-primary" id="addCategoryBtn">Add Category</button>
                             <button type="button" class="btn btn-warning" id="updateCategoryBtn" disabled>Update Category</button>
                             <button type="button" class="btn btn-danger" id="deleteCategoryBtn" disabled>Delete Category</button>
