@@ -22,4 +22,4 @@ if ($parentCategoryId !== null) {
     ]);
 }
 
-require_once 'fetch_categories.php';
+require_once 'process_fetch_categories.php';

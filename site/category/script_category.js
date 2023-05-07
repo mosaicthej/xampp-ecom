@@ -46,6 +46,7 @@ function createCategoryList(categories) {
     return listHtml;
 }
 
+
 function updateCategoryList() {
     document.getElementById('categoryList').innerHTML = createCategoryList(categories);
 }
