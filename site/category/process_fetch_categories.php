@@ -15,6 +15,7 @@ function fetchCategories($parentId = null) {
         $category = [
             'id' => $row['id'],
             'name' => $row['category_name'],
+            'desc' => $row['category_desc'],
             'children' => fetchCategories($row['id'])
         ];
         array_push($categories, $category);

@@ -4,10 +4,12 @@ require_once '../includes/functions.php';
 
 $categoryId = $_POST['categoryId'];
 $newcategory_name = $_POST['category_name'];
+$newcategory_desc = $_POST['category_desc'];
 $parentCategoryId = isset($_POST['parentCategoryId']) ? $_POST['parentCategoryId'] : -1;
 
-dbExecute("UPDATE category SET category_name = :categoryName, parent_category = :parentCategoryId WHERE id = :categoryId", [
+dbExecute("UPDATE category SET category_name = :category_name, category_desc = :category_desc, parent_category = :parentCategoryId WHERE id = :categoryId", [
     ':category_name' => $newcategory_name,
+    ':category_desc' => $newcategory_desc,
     ':parentCategoryId' => $parentCategoryId,
     ':categoryId' => $categoryId
 ]);

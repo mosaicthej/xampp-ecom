@@ -35,7 +35,9 @@ let selectedCategory = null;
 function createCategoryList(categories) {
     let listHtml = '';
     categories.forEach(category => {
-        listHtml += `<li data-category-id="${category.id}" class="list-group-item">${category.name}`;
+        listHtml += `<li data-category-id="${category.id}" class="list-group-item">
+                        <div>${category.name}</div>
+                        <small class="text-muted">${category.desc}</small>`;
         if (category.children.length > 0) {
             listHtml += `<ul class="list-group">${createCategoryList(category.children)}</ul>`;
         }
@@ -62,12 +64,16 @@ document.getElementById('categoryForm').addEventListener('submit', function(even
     event.preventDefault();
 
     const category_name = document.getElementById('category_name').value;
+    const category_desc = document.getElementById('category_desc').value;
     const parentCategoryId = selectedCategory ? selectedCategory.id : null;
 
     fetch('./process_add_category.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `category_name=${encodeURIComponent(category_name)}
+            &category_desc=${encodeURIComponent(category_desc)}
+            &parentCategoryId=${encodeURIComponent(parentCategoryId)==='null'?'-1':encodeURIComponent(parentCategoryId)
+            }` // Include category_desc here
     })
         .then(response => response.json())
         .then(data => {
@@ -78,15 +84,18 @@ document.getElementById('categoryForm').addEventListener('submit', function(even
 });
 
 
+
 document.getElementById('updateCategoryBtn').addEventListener('click', function() {
     if (selectedCategory) {
         const newcategory_name = document.getElementById('category_name').value;
+        const newcategory_desc = document.getElementById('category_desc').value; 
 
         fetch('./process_update_category.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `categoryId=${encodeURIComponent(selectedCategory.id)}
                 &category_name=${encodeURIComponent(newcategory_name)}
+                &category_desc=${encodeURIComponent(newcategory_desc)}`
         })
             .then(response => response.json())
             .then(data => {
@@ -122,10 +131,12 @@ document.getElementById('categoryList').addEventListener('click', function(event
         const categoryId = parseInt(categoryElement.dataset.categoryId);
         selectedCategory = findCategoryById(categories, categoryId);
         document.getElementById('category_name').value = selectedCategory.name;
+        document.getElementById('category_desc').value = selectedCategory.desc; // Add this line
         document.getElementById('updateCategoryBtn').disabled = false;
         document.getElementById('deleteCategoryBtn').disabled = false;
     }
 });
+
 
 // Helper functions
 function findCategoryById(categories, categoryId) {

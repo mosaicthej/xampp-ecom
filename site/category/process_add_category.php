@@ -5,8 +5,9 @@ require_once '../includes/functions.php';
 $category_name = $_POST['category_name'];
 $category_desc = $_POST['category_desc'];
 
-$stmt = dbExecute("INSERT INTO category (category_name, parent_category) VALUES (:categoryName, :parentCategoryId)", [
-    ':categoryName' => $categoryName,
+$stmt = dbExecute("INSERT INTO category (category_name, category_desc, parent_category) VALUES (:category_name, :category_desc, :parentCategoryId)", [
+    ':category_name' => $category_name,
+    ':category_desc' => $category_desc,
     ':parentCategoryId' => $parentCategoryId
 ])['stmt'];
 
