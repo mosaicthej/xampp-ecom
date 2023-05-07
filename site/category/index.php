@@ -46,6 +46,6 @@ $page = 'category';
             </main>
         </div>
     </div>
-    <script src="../../src/js/mock/category.js"></script>
+    <script src='./script_category.js'></script>
 </body>
 </html>

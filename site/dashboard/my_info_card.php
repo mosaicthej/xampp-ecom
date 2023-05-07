@@ -38,7 +38,7 @@
 				$def_addr_id = $user['default_usr_address_id'];
 
 				require_once '../includes/db_connection.php';
-				require_once '../includes/db_functions.php';
+				require_once '../includes/functions.php';
 				
 				if ($def_addr_id != -1) {
 					$addr_stmt = dbExecute("SELECT * FROM address WHERE id = (
