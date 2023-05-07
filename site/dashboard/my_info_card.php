@@ -36,28 +36,25 @@
 				// then get the address_id, then get the address from table address
 				// if ($user['default_usr_address_id'] == -1): do not display "Default Address"
 				$def_addr_id = $user['default_usr_address_id'];
+
+				require_once '../includes/db_connection.php';
+				require_once '../includes/db_functions.php';
+				
 				if ($def_addr_id != -1) {
-					$addr_query = "
-						SELECT * FROM address WHERE id = (
-							SELECT idAddress FROM user_address WHERE id = ? )";
-					
-					$addr_stmt = $conn->prepare($addr_query);
-					$addr_stmt->execute([$def_addr_id]);
+					$addr_stmt = dbExecute("SELECT * FROM address WHERE id = (
+							SELECT idAddress FROM user_address WHERE id = ? )", [$def_addr_id])['stmt'];
 					$addr_row = $addr_stmt->fetch(PDO::FETCH_ASSOC);
 					
 					// $city_info: getting `city`, `region`, `country` by getting the `name` field 
 						// from table `cities`, `regions`, `countries` respectively
 					$city_info = [];
-					$city_stmt = $conn->prepare("SELECT name FROM cities WHERE id = ?");
-					$city_stmt -> execute([$addr_row['city_id']]);
+					$city_stmt = dbExecute("SELECT name FROM cities WHERE id = ?", [$addr_row['city_id']])['stmt'];
 					$city_info['city'] = $city_stmt->fetchColumn();
 
-					$region_stmt = $conn->prepare("SELECT name FROM regions WHERE id = ?");
-					$region_stmt -> execute([$addr_row['region_id']]);
+					$region_stmt = dbExecute("SELECT name FROM regions WHERE id = ?", [$addr_row['region_id']])['stmt'];
 					$city_info['region'] = $region_stmt->fetchColumn();
 
-					$country_stmt = $conn->prepare("SELECT name FROM countries WHERE id = ?");
-					$country_stmt -> execute([$addr_row['country_id']]);
+					$country_stmt = dbExecute("SELECT name FROM countries WHERE id = ?", [$addr_row['country_id']])['stmt'];
 					$city_info['country'] = $country_stmt->fetchColumn();
 				
 					$addr_stmt->closeCursor();

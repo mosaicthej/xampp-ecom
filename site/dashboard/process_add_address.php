@@ -1,5 +1,6 @@
 <?php
 require_once '../includes/db_connection.php';
+require_once  '../includes/functions.php';
 session_start();
 /*
 var_dump($_POST);
@@ -61,12 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $query_user_address_add .= " );";
 
     $conn->beginTransaction();
-    $stmt = $conn->prepare($query_address_add);
-    try{
-        $success = $stmt->execute($query_address_add_params);
-    } catch (PDOException $e) {
-        echo $e->getMessage();
-    }
+    $success = dbExecute($query_address_add, $query_address_add_params)['success'];
+
     /*
     echo "executed query is:";
     echo $stmt->debugDumpParams();
@@ -76,8 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     */
     if ($success) {
         $query_user_address_add_params[1] = $conn->lastInsertId();
-        $stmt = $conn->prepare($query_user_address_add);
-        $success = $stmt->execute($query_user_address_add_params);
+        $success = dbExecute($query_user_address_add, $query_user_address_add_params)['success'];
         $response = [
             "status" => "success",
             "message" => "Address added successfully."

@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once './db_connection.php';
+require_once './functions.php';
 
 // Check if the user is logged in
 if (!isset($_SESSION['username'])) {
@@ -45,37 +46,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['context'])) {
                     $username = $_SESSION['username'];
                     $sql = "UPDATE user SET pfp = ? WHERE username = ?";
                     $redirect_page = '../dashboard.php';
-                    ?> <script>console.log("uploaded image!");</script> <?php
+?> <script> console.log("uploaded image!"); </script> <?php
                 } elseif ($context == 'product_image') {
                     $product_id = $_POST['product_id'];
                     $sql = "UPDATE product SET image = ? WHERE id = ?";
                     $redirect_page = '../product_detail.php?id=' . $product_id;
                 }
-                
 
-                try {
-                    $stmt = $conn->prepare($sql);
-                
-                    if ($context == 'profile_picture') {
-                        if($stmt->execute([$target_file, $username])) {
-                            header('Location: ' . $redirect_page);
-                        } else {
-                            $error = "Error updating " . $context . ": ".$stmt->errorInfo();
-                        }
-                    } elseif ($context == 'product_image') {
-                        if($stmt->execute([$target_file, $product_id])) {
-                            header('Location: ' . $redirect_page);
-                        } else {
-                            $error = "Error updating " . $context . ": ".$stmt->errorInfo();
-                        }
-                    }
-                } catch (PDOException $e) {
-                    $error = "Error preparing statement: " . $e->getMessage();
-                }                
-            } else {
-                $error = "Sorry, there was an error uploading your file.";
+                $result = dbExecute($sql, [$target_file, $username]);
+                if ($result['success']) {
+                    header('Location: ' . $redirect_page);
+                } else {
+                    $error = "Error updating " . $context . ": " . $result['error'];
+                }
             }
         }
     }
 }
-?>

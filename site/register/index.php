@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             (?, ?, ?, ?, ?, ?)
         SQL,
         [$username, $email, $hashed_password, $first_name, $last_name, $phone]
-    );
+    )['stmt'];
     
 
     // If the user is successfully added

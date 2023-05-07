@@ -12,12 +12,11 @@ if (!isset($_SESSION['username'])) {
 
 // Database connection
 require_once '../includes/db_connection.php';
+require_once '../includes/functions.php';
 
 // Get user information
 $userid = $_SESSION['id'];
-$sql = "SELECT * FROM user WHERE id = ?";
-$stmt = $conn->prepare($sql);
-$result = $stmt->execute([$userid]);
+$stmt = dbExecute("SELECT * FROM user WHERE id = ?", [$userid])['stmt'];
 $user = $stmt->fetch();
 
 // Fetch site statistics from the database

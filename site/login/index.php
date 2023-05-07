@@ -9,6 +9,7 @@ if (isset($_SESSION['username'])) {
 
 // Include the database connection file
 require_once '../includes/db_connection.php';
+require_once '../includes/functions.php';
 
 // Check if the form has been submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -17,9 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
 
     // Validate the user credentials
-    $sql = "SELECT * FROM user WHERE email = ?";
-    $stmt = $conn -> prepare($sql);
-    $success = $stmt -> execute([$email]); // $stmt -> execute([[$email
+    $stmt = dbExecute("SELECT * FROM user WHERE email = ?", [$email])['stmt'];
     $result = $stmt -> fetch();
     
 
@@ -90,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <button type="submit" class="btn btn-primary">Login</button>
                         </form>
                         <p class="mt-3"><a href="#">Forgot password?</a></p>
-                        <p>Don't have an account? <a href="register.php">Sign up</a></p>
+                        <p>Don't have an account? <a href="../register">Sign up</a></p>
                     </div>
                 </div>
             </div>

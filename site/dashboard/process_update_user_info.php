@@ -1,5 +1,6 @@
 <?php
 require_once '../includes/db_connection.php';
+require_once '../includes/functions.php';
 session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fields = [
@@ -19,8 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $query_userinfo_update_params[] = $_SESSION['username'];
 
     $conn->beginTransaction();
-    $stmt = $conn->prepare($query_userinfo_update);
-    $success = $stmt->execute($query_userinfo_update_params);
+    $success = dbExecute($query_userinfo_update, $query_userinfo_update_params)['success'];
 
     // update the response format to return a JSON object that includes the status and user data:
     if ($success) {

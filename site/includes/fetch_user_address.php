@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once './db_connection.php';
+require_once './functions.php';
 
 /*
 * upon a GET request, this script will return a JSON like this:
@@ -16,9 +17,7 @@ $response = [
 ];
 
 $idUser = $_SESSION['id'];
-$query_user_default_addr = " SELECT default_usr_address_id FROM user WHERE id = ? ";
-$stmt = $conn->prepare($query_user_default_addr);
-$stmt->execute([$idUser]);
+$stmt = dbExecute("SELECT default_usr_address_id FROM user WHERE id = ?", [$idUser])['stmt'];
 $response['default_usr_addr_id'] = $stmt->fetch(PDO::FETCH_ASSOC)['default_usr_address_id'];
 
 
@@ -36,7 +35,7 @@ $addresses = [];
 // with the id, look in the address table, get the address info.
 // need to cross referenc tables country, region, city to get the names
 // of the country, region, city
-$query_addrInfo = "
+$query_addrInfo = <<<SQL
     SELECT ua.id AS usr_addr_id,
         ua.contact_name, ua.contact_phone, ua.contact_email,
         a.street, a.streetno, a.apartment_no, a.postal_code,
@@ -51,10 +50,8 @@ $query_addrInfo = "
     INNER JOIN cities AS ct
         ON a.city_id = ct.id
     WHERE ua.idUser = ? AND NOT ua.deleted
-";
-$stmt = $conn->prepare($query_addrInfo);
-$stmt->execute([$idUser]);
-$addrInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+SQL;
+$addrInfo = dbExecute($query_addrInfo, [$idUser])['stmt']->fetchAll(PDO::FETCH_ASSOC);
 $response['addresses'] = $addrInfo;
 
 header('Content-Type: application/json');
