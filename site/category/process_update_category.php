@@ -3,11 +3,11 @@ require_once '../includes/db_connection.php';
 require_once '../includes/functions.php';
 
 $categoryId = $_POST['categoryId'];
-$newCategoryName = $_POST['categoryName'];
-$parentCategoryId = isset($_POST['parentCategoryId']) ? $_POST['parentCategoryId'] : null;
+$newcategory_name = $_POST['category_name'];
+$parentCategoryId = isset($_POST['parentCategoryId']) ? $_POST['parentCategoryId'] : -1;
 
 dbExecute("UPDATE category SET category_name = :categoryName, parent_category = :parentCategoryId WHERE id = :categoryId", [
-    ':categoryName' => $newCategoryName,
+    ':category_name' => $newcategory_name,
     ':parentCategoryId' => $parentCategoryId,
     ':categoryId' => $categoryId
 ]);

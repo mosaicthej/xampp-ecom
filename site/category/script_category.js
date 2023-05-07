@@ -61,13 +61,13 @@ fetch('./process_fetch_categories.php')
 document.getElementById('categoryForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const categoryName = document.getElementById('categoryName').value;
+    const category_name = document.getElementById('category_name').value;
     const parentCategoryId = selectedCategory ? selectedCategory.id : null;
 
     fetch('./process_add_category.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `categoryName=${encodeURIComponent(categoryName)}&parentCategoryId=${encodeURIComponent(parentCategoryId)}`
+        body: `category_name=${encodeURIComponent(category_name)}
     })
         .then(response => response.json())
         .then(data => {
@@ -80,12 +80,13 @@ document.getElementById('categoryForm').addEventListener('submit', function(even
 
 document.getElementById('updateCategoryBtn').addEventListener('click', function() {
     if (selectedCategory) {
-        const newCategoryName = document.getElementById('categoryName').value;
+        const newcategory_name = document.getElementById('category_name').value;
 
         fetch('./process_update_category.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `categoryId=${encodeURIComponent(selectedCategory.id)}&categoryName=${encodeURIComponent(newCategoryName)}`
+            body: `categoryId=${encodeURIComponent(selectedCategory.id)}
+                &category_name=${encodeURIComponent(newcategory_name)}
         })
             .then(response => response.json())
             .then(data => {
@@ -107,7 +108,7 @@ document.getElementById('deleteCategoryBtn').addEventListener('click', function(
             .then(data =>  {
                 categories = data;
                 selectedCategory = null;
-                document.getElementById('categoryName').value = '';
+                document.getElementById('category_name').value = '';
                 updateCategoryList();
             });
     }
@@ -120,7 +121,7 @@ document.getElementById('categoryList').addEventListener('click', function(event
     if (categoryElement) {
         const categoryId = parseInt(categoryElement.dataset.categoryId);
         selectedCategory = findCategoryById(categories, categoryId);
-        document.getElementById('categoryName').value = selectedCategory.name;
+        document.getElementById('category_name').value = selectedCategory.name;
         document.getElementById('updateCategoryBtn').disabled = false;
         document.getElementById('deleteCategoryBtn').disabled = false;
     }

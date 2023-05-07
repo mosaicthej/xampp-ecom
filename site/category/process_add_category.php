@@ -2,8 +2,8 @@
 require_once '../includes/db_connection.php';
 require_once '../includes/functions.php';
 
-$categoryName = $_POST['categoryName'];
-$parentCategoryId = isset($_POST['parentCategoryId']) ? $_POST['parentCategoryId'] : null;
+$category_name = $_POST['category_name'];
+$category_desc = $_POST['category_desc'];
 
 $stmt = dbExecute("INSERT INTO category (category_name, parent_category) VALUES (:categoryName, :parentCategoryId)", [
     ':categoryName' => $categoryName,

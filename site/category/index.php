@@ -28,12 +28,12 @@ $page = 'category';
                     <div class="col-md-6">
                         <form id="categoryForm">
                             <div class="form-group">
-                                <label for="categoryName">Category Name:</label>
-                                <input type="text" class="form-control" id="categoryName" placeholder="Enter category name" name="categoryName" required>
+                                <label for="category_name">Category Name:</label>
+                                <input type="text" class="form-control" id="category_name" placeholder="Enter category name" name="category_name" required>
                             </div>
                             <div class="form-group">
-                                <label for="categoryDesc">Category Description:</label>
-                                <textarea class="form-control" id="categoryDesc" placeholder="Enter category description" name="categoryDesc" required></textarea>
+                                <label for="category_desc">Category Description:</label>
+                                <textarea class="form-control" id="category_desc" placeholder="Enter category description" name="category_desc" required></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary" id="addCategoryBtn">Add Category</button>
                             <button type="button" class="btn btn-warning" id="updateCategoryBtn" disabled>Update Category</button>
