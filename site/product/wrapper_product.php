@@ -52,7 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] != 'GET') {
     }
 
     $productGrid .= '</div>';
-    // $productGrid = json_encode($productGrid);
     echo $productGrid;
     exit();
 }
