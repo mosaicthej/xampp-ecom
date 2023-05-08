@@ -1,3 +1,60 @@
+// adding the category selector
+let categories = [];
+// Selected category for updating or deleting
+let selectedCategory = null;
+
+// Functions to generate category list HTML
+function createCategoryList(categories) {
+    let listHtml = '';
+    categories.forEach(category => {
+        listHtml += `<li data-category-id="${category.id}" class="list-group-item">
+                        <div>${category.name}</div>
+                        <small class="text-muted">${category.desc}</small>`;
+        if (category.children.length > 0) {
+            listHtml += `<ul class="list-group">${createCategoryList(category.children)}</ul>`;
+        }
+        listHtml += '</li>';
+    });
+    return listHtml;
+}
+
+document.getElementById('categoryList').addEventListener('click', function(event) {
+    const categoryElement = event.target.closest('[data-category-id]');
+    if (categoryElement) {
+        const categoryId = parseInt(categoryElement.dataset.categoryId);
+        selectedCategory = findCategoryById(categories, categoryId);
+
+        filterProdByCategory(categoryId);
+    }
+}); 
+
+// Helper functions
+function findCategoryById(categories, categoryId) {
+    for (const category of categories) {
+        if (category.id === categoryId) {
+            return category;
+        }
+        const foundCategory = findCategoryById(category.children, categoryId);
+        if (foundCategory) {
+            return foundCategory;
+        }
+    }
+    return null;
+}
+
+
+function updateCategoryList() {
+    document.getElementById('categoryList').innerHTML = createCategoryList(categories);
+}
+
+// Initial rendering of category list
+fetch('../category/process_fetch_categories.php')
+    .then(response => response.json())
+    .then(data => {
+        categories = data;
+        updateCategoryList();
+    });
+
 
 // Mock product data
 let products = [];
@@ -25,25 +82,24 @@ let products = [];
 
 let selectedProduct = null;
 
-// Functions to generate product grid HTML
-function createProductCard(product) {
-    return `
-    <div class="col-md-4 col-lg-3 mb-4" data-product-id="${product.id}">
-        <div class="card">
-            <img src="${product.imageUrl}" class="card-img-top" alt="Product image">
-            <div class="card-body">
-                <h5 class="card-title">${product.name}</h5>
-                <p class="card-text">${product.description}</p>
-                <p class="card-price text-success">$${product.price.toFixed(2)}</p>
-            </div>
-        </div>
-    </div>
-    `;
+function filterProdByCategory(categoryId){
+    fetch('./wrapper_product.php'.concat('?categoryID=', categoryId), {
+            method: 'GET',
+        }).then( (res) => {
+            console.log(res);
+            return res.text();
+        }).then( (text) => {    
+            console.log(text);
+            document.getElementById('prod_wrapper').innerHTML = text;
+        }, (err) => {
+            console.log(err);
+        }
+    );
 }
 
-function updateProductGrid() {
+function updateProductGrid(products) {
     const productGrid = document.getElementById('productGrid');
-    productGrid.innerHTML = products.map(product => createProductCard(product)).join('');
+    console.log('products is now:' + products);
 }
     
 
@@ -54,6 +110,7 @@ function fetchProducts() {
         dataType: 'json',
         success: function (response) {
             updateProductGrid(response);
+            console.log('displaying products:')
         },
         error: function () {
             alert('Error fetching products.');
@@ -69,7 +126,10 @@ function buildCategoryTree(categories) {
     let tree = '<ul>';
     for (const category of categories) {
         tree += `<li 
-            data-category-id="${category.id}">
+            data-category-id="${category.id}"
+            onclick="handleCategoryClick(event)"
+            hover="pointer"
+            >
             ${category.name}${buildCategoryTree(category.children)}
             </li>`;
     }
@@ -98,7 +158,8 @@ fetchCategories();
 
 
 function handleCategoryClick(event) {
-    if (event.target.tagName === 'li') {
+    if (event.target.tagName === 'LI') {
+        console.log('clicked category id: ' + event.target.dataset.categoryId);
         document.getElementById('selectedCategoryId').value = event.target.dataset.categoryId;
     }
 }
@@ -109,7 +170,7 @@ fetchCategories();
 
 
 // Initial fetch and rendering of product grid
-fetchProducts();
+filterProdByCategory(-1);
 
 
 // Event listeners for buttons and product grid
@@ -120,7 +181,6 @@ document.getElementById('productForm').addEventListener('submit', function (even
     formData.push(`productName=${document.getElementById('productName').value}`);
     formData.push(`productPrice=${document.getElementById('productPrice').value}`);
     formData.push(`productDescription=${document.getElementById('productDescription').value}`);
-    formData.push(`productImageUrl=${document.getElementById('productImage').value}`);
     formData.push('categoryId', document.getElementById('selectedCategoryId').value);
 
     const formDataString = formData.join('&');
@@ -133,7 +193,7 @@ document.getElementById('productForm').addEventListener('submit', function (even
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         data: formDataString,
         success: function () {
-            fetchProducts();
+            filterProdByCategory(-1);
             $('#productModal').modal('hide');
         },
         error: function () {
@@ -151,7 +211,7 @@ document.getElementById('deleteProductBtn').addEventListener('click', function()
             method: 'POST',
             data: { id: selectedProduct.id },
             success: function () {
-                fetchProducts();
+                filterProdByCategory(-1);
                 $('#productModal').modal('hide');
             },
             error: function () {

@@ -28,7 +28,12 @@ $page = 'product';
                         <button type="button" class="btn btn-primary mb-3" id="addProductBtn" data-toggle="modal" data-target="#productModal">Add Product</button>
                     </div>
                 </div>
-            <?php include './wrapper_product.php'; ?>
+                <div class="row">
+                    <div class="col-md-8" id="prod_wrapper">
+                        
+                    </div>
+                    <div class="col-md-4">
+                        <?php include '../category/component_category_bar.php'; ?>
             </main>
             <!-- Product Modal -->
             <?php include './modal_product.php'; ?>
