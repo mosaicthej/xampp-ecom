@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： 127.0.0.1
--- 生成日期： 2023-05-07 15:11:08
+-- 生成日期： 2023-05-08 15:10:17
 -- 服务器版本： 10.4.28-MariaDB
 -- PHP 版本： 8.2.4
 
@@ -30,8 +30,8 @@ USE `ecomdb`;
 --
 
 DROP TABLE IF EXISTS `address`;
-CREATE TABLE IF NOT EXISTS `address` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `address` (
+  `id` int(11) NOT NULL,
   `streetno` varchar(45) DEFAULT NULL,
   `street` varchar(45) DEFAULT NULL,
   `city_id` int(11) UNSIGNED NOT NULL,
@@ -41,12 +41,8 @@ CREATE TABLE IF NOT EXISTS `address` (
   `apartment_no` varchar(45) DEFAULT NULL,
   `created_time` timestamp NULL DEFAULT current_timestamp(),
   `modified_time` timestamp NULL DEFAULT NULL,
-  `deleted_time` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_addr_city` (`city_id`),
-  KEY `fk_addr_region` (`region_id`),
-  KEY `fk_addr_country` (`country_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `deleted_time` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- 转存表中的数据 `address`
@@ -67,15 +63,13 @@ INSERT INTO `address` (`id`, `streetno`, `street`, `city_id`, `region_id`, `coun
 --
 
 DROP TABLE IF EXISTS `cart`;
-CREATE TABLE IF NOT EXISTS `cart` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `cart` (
+  `id` int(11) NOT NULL,
   `userid` int(11) NOT NULL,
   `total` decimal(10,0) NOT NULL,
   `created_time` timestamp NULL DEFAULT current_timestamp(),
   `modified_time` timestamp NULL DEFAULT NULL,
-  `deleted_time` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_cart_uid` (`userid`)
+  `deleted_time` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -85,17 +79,14 @@ CREATE TABLE IF NOT EXISTS `cart` (
 --
 
 DROP TABLE IF EXISTS `cart_product`;
-CREATE TABLE IF NOT EXISTS `cart_product` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `cart_product` (
+  `id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `cartid` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
   `created_time` timestamp NULL DEFAULT current_timestamp(),
   `modified_time` timestamp NULL DEFAULT NULL,
-  `deleted_time` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_cartprod_prodid` (`product_id`),
-  KEY `fk_cartprod_cartid` (`cartid`)
+  `deleted_time` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -105,14 +96,13 @@ CREATE TABLE IF NOT EXISTS `cart_product` (
 --
 
 DROP TABLE IF EXISTS `category`;
-CREATE TABLE IF NOT EXISTS `category` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `category` (
+  `id` int(11) NOT NULL,
   `category_name` varchar(45) NOT NULL,
   `category_desc` varchar(45) DEFAULT NULL,
   `parent_category` int(11) DEFAULT -1,
-  `deleted` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `deleted` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- 转存表中的数据 `category`
@@ -137,15 +127,12 @@ INSERT INTO `category` (`id`, `category_name`, `category_desc`, `parent_category
 --
 
 DROP TABLE IF EXISTS `category_subcategories`;
-CREATE TABLE IF NOT EXISTS `category_subcategories` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `category_subcategories` (
+  `id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   `child_id` int(11) NOT NULL,
-  `deleted` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  KEY `fk_categoryhier_cateid` (`category_id`),
-  KEY `fk_categoryhier_childid` (`child_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `deleted` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- 转存表中的数据 `category_subcategories`
@@ -172,16 +159,14 @@ INSERT INTO `category_subcategories` (`id`, `category_id`, `child_id`, `deleted`
 --
 
 DROP TABLE IF EXISTS `cities`;
-CREATE TABLE IF NOT EXISTS `cities` (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `cities` (
+  `id` int(11) UNSIGNED NOT NULL,
   `region_id` int(11) UNSIGNED NOT NULL,
   `country_id` smallint(5) UNSIGNED NOT NULL,
   `latitude` decimal(10,8) NOT NULL,
   `longitude` decimal(11,8) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `country_region_name` (`country_id`,`region_id`,`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2790952 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
 
@@ -190,13 +175,11 @@ CREATE TABLE IF NOT EXISTS `cities` (
 --
 
 DROP TABLE IF EXISTS `countries`;
-CREATE TABLE IF NOT EXISTS `countries` (
-  `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `countries` (
+  `id` smallint(5) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
-  `code` varchar(10) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=231 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `code` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
 
@@ -205,15 +188,14 @@ CREATE TABLE IF NOT EXISTS `countries` (
 --
 
 DROP TABLE IF EXISTS `discount`;
-CREATE TABLE IF NOT EXISTS `discount` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `discount` (
+  `id` int(11) NOT NULL,
   `discount_method` varchar(45) NOT NULL,
   `discount_amount` decimal(10,0) DEFAULT NULL,
   `discount_percentage` decimal(10,0) DEFAULT NULL,
   `created_time` timestamp NULL DEFAULT current_timestamp(),
   `modified_time` timestamp NULL DEFAULT NULL,
-  `deleted_time` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `deleted_time` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -223,16 +205,13 @@ CREATE TABLE IF NOT EXISTS `discount` (
 --
 
 DROP TABLE IF EXISTS `inventory`;
-CREATE TABLE IF NOT EXISTS `inventory` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `inventory` (
+  `id` int(11) NOT NULL,
   `id_address` int(11) DEFAULT NULL,
   `id_management` int(11) DEFAULT NULL,
   `created_time` timestamp NULL DEFAULT current_timestamp(),
   `modified_time` timestamp NULL DEFAULT NULL,
-  `deleted_time` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_inv_addr` (`id_address`),
-  KEY `fk_inv_man` (`id_management`)
+  `deleted_time` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -242,17 +221,14 @@ CREATE TABLE IF NOT EXISTS `inventory` (
 --
 
 DROP TABLE IF EXISTS `inventory_management`;
-CREATE TABLE IF NOT EXISTS `inventory_management` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `inventory_management` (
+  `id` int(11) NOT NULL,
   `inventory_id` int(11) NOT NULL,
   `management_id` int(11) NOT NULL,
   `associated_cost` decimal(10,0) NOT NULL,
   `created_time` timestamp NULL DEFAULT current_timestamp(),
   `modified_time` timestamp NULL DEFAULT NULL,
-  `deleted_time` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_inventman_inv` (`inventory_id`),
-  KEY `fk_inventman_man` (`management_id`)
+  `deleted_time` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -262,11 +238,10 @@ CREATE TABLE IF NOT EXISTS `inventory_management` (
 --
 
 DROP TABLE IF EXISTS `keyword`;
-CREATE TABLE IF NOT EXISTS `keyword` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `keyword` (
+  `id` int(11) NOT NULL,
   `keyword` varchar(45) NOT NULL,
-  `desc` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `desc` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -276,16 +251,15 @@ CREATE TABLE IF NOT EXISTS `keyword` (
 --
 
 DROP TABLE IF EXISTS `management`;
-CREATE TABLE IF NOT EXISTS `management` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `management` (
+  `id` int(11) NOT NULL,
   `contact_person` varchar(45) DEFAULT NULL,
   `company_name` varchar(45) NOT NULL,
   `contact_number` varchar(45) DEFAULT NULL,
   `contact_email` varchar(45) DEFAULT NULL,
   `created_time` timestamp NULL DEFAULT current_timestamp(),
   `modified_time` timestamp NULL DEFAULT NULL,
-  `deleted_time` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `deleted_time` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -295,8 +269,8 @@ CREATE TABLE IF NOT EXISTS `management` (
 --
 
 DROP TABLE IF EXISTS `order`;
-CREATE TABLE IF NOT EXISTS `order` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `order` (
+  `id` int(11) NOT NULL,
   `userid` int(11) NOT NULL,
   `amount_due` decimal(10,0) NOT NULL,
   `amount_paid` decimal(10,0) NOT NULL,
@@ -304,11 +278,7 @@ CREATE TABLE IF NOT EXISTS `order` (
   `paymentid` int(11) NOT NULL,
   `created_time` timestamp NULL DEFAULT current_timestamp(),
   `modified_time` timestamp NULL DEFAULT NULL,
-  `deleted_time` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_order_userid` (`userid`),
-  KEY `fk_order_useraddrid` (`shipto_useraddressid`),
-  KEY `fk_order_paymentid` (`paymentid`)
+  `deleted_time` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -318,16 +288,13 @@ CREATE TABLE IF NOT EXISTS `order` (
 --
 
 DROP TABLE IF EXISTS `order_discount`;
-CREATE TABLE IF NOT EXISTS `order_discount` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `order_discount` (
+  `id` int(11) NOT NULL,
   `created_time` timestamp NULL DEFAULT current_timestamp(),
   `modified_time` timestamp NULL DEFAULT NULL,
   `deleted_time` timestamp NULL DEFAULT NULL,
   `orderid` int(11) DEFAULT NULL,
-  `discountid` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_orddisc_ordid` (`orderid`),
-  KEY `fk_orddisc_discid` (`discountid`)
+  `discountid` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -337,19 +304,15 @@ CREATE TABLE IF NOT EXISTS `order_discount` (
 --
 
 DROP TABLE IF EXISTS `order_items`;
-CREATE TABLE IF NOT EXISTS `order_items` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `order_items` (
+  `id` int(11) NOT NULL,
   `productid` int(11) NOT NULL,
   `quantity` int(11) NOT NULL DEFAULT 1,
   `discountid` int(11) DEFAULT -1,
   `orderid` int(11) NOT NULL,
   `created_time` timestamp NULL DEFAULT current_timestamp(),
   `modified_time` timestamp NULL DEFAULT NULL,
-  `deleted_time` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_orderitem_prodid` (`productid`),
-  KEY `fk_orderitem_discountid` (`discountid`),
-  KEY `fk_orderitem_orderid` (`orderid`)
+  `deleted_time` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -359,13 +322,10 @@ CREATE TABLE IF NOT EXISTS `order_items` (
 --
 
 DROP TABLE IF EXISTS `order_shipment`;
-CREATE TABLE IF NOT EXISTS `order_shipment` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `order_shipment` (
+  `id` int(11) NOT NULL,
   `orderid` int(11) NOT NULL,
-  `shipmentid` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_ordership_orderid` (`orderid`),
-  KEY `fk_ordership_shipid` (`shipmentid`)
+  `shipmentid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -375,19 +335,18 @@ CREATE TABLE IF NOT EXISTS `order_shipment` (
 --
 
 DROP TABLE IF EXISTS `product`;
-CREATE TABLE IF NOT EXISTS `product` (
+CREATE TABLE `product` (
   `id` int(11) NOT NULL,
   `name` varchar(45) NOT NULL,
   `description` text NOT NULL,
   `price` decimal(10,0) NOT NULL,
   `image` varchar(100) NOT NULL,
   `available` tinyint(4) NOT NULL,
-  `categoryid` int(11) DEFAULT NULL,
+  `categoryid` int(11) DEFAULT -1,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
   `created_time` timestamp NULL DEFAULT current_timestamp(),
   `modified_time` timestamp NULL DEFAULT NULL,
-  `deleted_time` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_product_cateid` (`categoryid`)
+  `deleted_time` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -397,17 +356,14 @@ CREATE TABLE IF NOT EXISTS `product` (
 --
 
 DROP TABLE IF EXISTS `product_discount`;
-CREATE TABLE IF NOT EXISTS `product_discount` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `product_discount` (
+  `id` int(11) NOT NULL,
   `productid` int(11) NOT NULL,
   `discountid` int(11) NOT NULL,
   `available_till` date DEFAULT NULL,
   `created_time` timestamp NULL DEFAULT current_timestamp(),
   `modified_time` timestamp NULL DEFAULT NULL,
-  `deleted_time` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_productdisc_prodid` (`productid`),
-  KEY `fk_productdisc_discid` (`discountid`)
+  `deleted_time` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -417,17 +373,14 @@ CREATE TABLE IF NOT EXISTS `product_discount` (
 --
 
 DROP TABLE IF EXISTS `product_inventory`;
-CREATE TABLE IF NOT EXISTS `product_inventory` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `product_inventory` (
+  `id` int(11) NOT NULL,
   `id_product` int(11) NOT NULL,
   `id_inventory` int(11) DEFAULT NULL,
   `quantity` int(11) NOT NULL,
   `created_time` timestamp NULL DEFAULT current_timestamp(),
   `modified_time` timestamp NULL DEFAULT NULL,
-  `deleted_time` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_prodinv_prodid` (`id_product`),
-  KEY `fk_prodinv_invid` (`id_inventory`)
+  `deleted_time` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -437,13 +390,10 @@ CREATE TABLE IF NOT EXISTS `product_inventory` (
 --
 
 DROP TABLE IF EXISTS `product_tag`;
-CREATE TABLE IF NOT EXISTS `product_tag` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `product_tag` (
+  `id` int(11) NOT NULL,
   `productid` int(11) NOT NULL,
-  `tagid` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_prodtag_prodid` (`productid`),
-  KEY `fk_prodtag_tagid` (`tagid`)
+  `tagid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -453,14 +403,12 @@ CREATE TABLE IF NOT EXISTS `product_tag` (
 --
 
 DROP TABLE IF EXISTS `regions`;
-CREATE TABLE IF NOT EXISTS `regions` (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `regions` (
+  `id` int(11) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
   `code` varchar(10) NOT NULL,
-  `country_id` smallint(5) UNSIGNED NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `country_name` (`country_id`,`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3889 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci ROW_FORMAT=DYNAMIC;
+  `country_id` smallint(5) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
 
@@ -469,16 +417,12 @@ CREATE TABLE IF NOT EXISTS `regions` (
 --
 
 DROP TABLE IF EXISTS `shipment`;
-CREATE TABLE IF NOT EXISTS `shipment` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `shipment` (
+  `id` int(11) NOT NULL,
   `orderid` int(11) NOT NULL,
   `from_inventoryid` int(11) NOT NULL,
   `to_usraddressid` int(11) NOT NULL,
-  `logistics_provider` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_ship_orderid` (`orderid`),
-  KEY `fk_ship_frominvid` (`from_inventoryid`),
-  KEY `fk_ship_tousraddrid` (`to_usraddressid`)
+  `logistics_provider` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -488,11 +432,10 @@ CREATE TABLE IF NOT EXISTS `shipment` (
 --
 
 DROP TABLE IF EXISTS `tag`;
-CREATE TABLE IF NOT EXISTS `tag` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `tag` (
+  `id` int(11) NOT NULL,
   `name` varchar(45) NOT NULL,
-  `desc` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `desc` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -502,13 +445,10 @@ CREATE TABLE IF NOT EXISTS `tag` (
 --
 
 DROP TABLE IF EXISTS `tag_keyword`;
-CREATE TABLE IF NOT EXISTS `tag_keyword` (
-  `idtag_keyword` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `tag_keyword` (
+  `idtag_keyword` int(11) NOT NULL,
   `tagid` int(11) NOT NULL,
-  `keywordid` int(11) NOT NULL,
-  PRIMARY KEY (`idtag_keyword`),
-  KEY `fk_tagkey_tagid` (`tagid`),
-  KEY `fk_tagkey_keyid` (`keywordid`)
+  `keywordid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -518,8 +458,8 @@ CREATE TABLE IF NOT EXISTS `tag_keyword` (
 --
 
 DROP TABLE IF EXISTS `user`;
-CREATE TABLE IF NOT EXISTS `user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL,
   `username` varchar(45) NOT NULL,
   `password` varchar(100) NOT NULL,
   `first_name` varchar(45) DEFAULT NULL,
@@ -530,10 +470,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `pfp` varchar(100) DEFAULT NULL,
   `created_time` timestamp NULL DEFAULT current_timestamp(),
   `modified_time` timestamp NULL DEFAULT NULL,
-  `deleted_time` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`,`username`),
-  UNIQUE KEY `username_UNIQUE` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `deleted_time` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- 转存表中的数据 `user`
@@ -550,8 +488,8 @@ INSERT INTO `user` (`id`, `username`, `password`, `first_name`, `last_name`, `em
 --
 
 DROP TABLE IF EXISTS `user_address`;
-CREATE TABLE IF NOT EXISTS `user_address` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `user_address` (
+  `id` int(11) NOT NULL,
   `idUser` int(11) DEFAULT NULL,
   `idAddress` int(11) DEFAULT NULL,
   `contact_name` varchar(45) NOT NULL,
@@ -560,11 +498,8 @@ CREATE TABLE IF NOT EXISTS `user_address` (
   `cretated_time` timestamp NULL DEFAULT current_timestamp(),
   `modified_time` timestamp NULL DEFAULT NULL,
   `deleted_time` timestamp NULL DEFAULT NULL,
-  `deleted` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  KEY `fk_useraddr_userid` (`idUser`),
-  KEY `fk_useraddr_addrid` (`idAddress`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `deleted` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- 转存表中的数据 `user_address`
@@ -582,17 +517,388 @@ INSERT INTO `user_address` (`id`, `idUser`, `idAddress`, `contact_name`, `contac
 --
 
 DROP TABLE IF EXISTS `user_payment`;
-CREATE TABLE IF NOT EXISTS `user_payment` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `user_payment` (
+  `id` int(11) NOT NULL,
   `idUser` int(11) NOT NULL,
   `payment_type` varchar(45) NOT NULL,
   `service_provider` varchar(45) NOT NULL,
   `account_number` varchar(45) NOT NULL,
   `expiry` date NOT NULL,
-  `service_reference_number` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`,`idUser`) USING BTREE,
-  KEY `fk_payment_userid` (`idUser`)
+  `service_reference_number` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- 转储表的索引
+--
+
+--
+-- 表的索引 `address`
+--
+ALTER TABLE `address`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_addr_city` (`city_id`),
+  ADD KEY `fk_addr_region` (`region_id`),
+  ADD KEY `fk_addr_country` (`country_id`);
+
+--
+-- 表的索引 `cart`
+--
+ALTER TABLE `cart`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_cart_uid` (`userid`);
+
+--
+-- 表的索引 `cart_product`
+--
+ALTER TABLE `cart_product`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_cartprod_prodid` (`product_id`),
+  ADD KEY `fk_cartprod_cartid` (`cartid`);
+
+--
+-- 表的索引 `category`
+--
+ALTER TABLE `category`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- 表的索引 `category_subcategories`
+--
+ALTER TABLE `category_subcategories`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_categoryhier_cateid` (`category_id`),
+  ADD KEY `fk_categoryhier_childid` (`child_id`);
+
+--
+-- 表的索引 `cities`
+--
+ALTER TABLE `cities`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `country_region_name` (`country_id`,`region_id`,`name`);
+
+--
+-- 表的索引 `countries`
+--
+ALTER TABLE `countries`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`);
+
+--
+-- 表的索引 `discount`
+--
+ALTER TABLE `discount`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- 表的索引 `inventory`
+--
+ALTER TABLE `inventory`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_inv_addr` (`id_address`),
+  ADD KEY `fk_inv_man` (`id_management`);
+
+--
+-- 表的索引 `inventory_management`
+--
+ALTER TABLE `inventory_management`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_inventman_inv` (`inventory_id`),
+  ADD KEY `fk_inventman_man` (`management_id`);
+
+--
+-- 表的索引 `keyword`
+--
+ALTER TABLE `keyword`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- 表的索引 `management`
+--
+ALTER TABLE `management`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- 表的索引 `order`
+--
+ALTER TABLE `order`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_order_userid` (`userid`),
+  ADD KEY `fk_order_useraddrid` (`shipto_useraddressid`),
+  ADD KEY `fk_order_paymentid` (`paymentid`);
+
+--
+-- 表的索引 `order_discount`
+--
+ALTER TABLE `order_discount`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_orddisc_ordid` (`orderid`),
+  ADD KEY `fk_orddisc_discid` (`discountid`);
+
+--
+-- 表的索引 `order_items`
+--
+ALTER TABLE `order_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_orderitem_prodid` (`productid`),
+  ADD KEY `fk_orderitem_discountid` (`discountid`),
+  ADD KEY `fk_orderitem_orderid` (`orderid`);
+
+--
+-- 表的索引 `order_shipment`
+--
+ALTER TABLE `order_shipment`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_ordership_orderid` (`orderid`),
+  ADD KEY `fk_ordership_shipid` (`shipmentid`);
+
+--
+-- 表的索引 `product`
+--
+ALTER TABLE `product`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_product_cateid` (`categoryid`);
+
+--
+-- 表的索引 `product_discount`
+--
+ALTER TABLE `product_discount`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_productdisc_prodid` (`productid`),
+  ADD KEY `fk_productdisc_discid` (`discountid`);
+
+--
+-- 表的索引 `product_inventory`
+--
+ALTER TABLE `product_inventory`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_prodinv_prodid` (`id_product`),
+  ADD KEY `fk_prodinv_invid` (`id_inventory`);
+
+--
+-- 表的索引 `product_tag`
+--
+ALTER TABLE `product_tag`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_prodtag_prodid` (`productid`),
+  ADD KEY `fk_prodtag_tagid` (`tagid`);
+
+--
+-- 表的索引 `regions`
+--
+ALTER TABLE `regions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `country_name` (`country_id`,`name`);
+
+--
+-- 表的索引 `shipment`
+--
+ALTER TABLE `shipment`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_ship_orderid` (`orderid`),
+  ADD KEY `fk_ship_frominvid` (`from_inventoryid`),
+  ADD KEY `fk_ship_tousraddrid` (`to_usraddressid`);
+
+--
+-- 表的索引 `tag`
+--
+ALTER TABLE `tag`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- 表的索引 `tag_keyword`
+--
+ALTER TABLE `tag_keyword`
+  ADD PRIMARY KEY (`idtag_keyword`),
+  ADD KEY `fk_tagkey_tagid` (`tagid`),
+  ADD KEY `fk_tagkey_keyid` (`keywordid`);
+
+--
+-- 表的索引 `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`,`username`),
+  ADD UNIQUE KEY `username_UNIQUE` (`username`);
+
+--
+-- 表的索引 `user_address`
+--
+ALTER TABLE `user_address`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_useraddr_userid` (`idUser`),
+  ADD KEY `fk_useraddr_addrid` (`idAddress`);
+
+--
+-- 表的索引 `user_payment`
+--
+ALTER TABLE `user_payment`
+  ADD PRIMARY KEY (`id`,`idUser`) USING BTREE,
+  ADD KEY `fk_payment_userid` (`idUser`);
+
+--
+-- 在导出的表使用AUTO_INCREMENT
+--
+
+--
+-- 使用表AUTO_INCREMENT `address`
+--
+ALTER TABLE `address`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- 使用表AUTO_INCREMENT `cart`
+--
+ALTER TABLE `cart`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `cart_product`
+--
+ALTER TABLE `cart_product`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `category`
+--
+ALTER TABLE `category`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- 使用表AUTO_INCREMENT `category_subcategories`
+--
+ALTER TABLE `category_subcategories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+
+--
+-- 使用表AUTO_INCREMENT `cities`
+--
+ALTER TABLE `cities`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `countries`
+--
+ALTER TABLE `countries`
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `discount`
+--
+ALTER TABLE `discount`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `inventory`
+--
+ALTER TABLE `inventory`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `inventory_management`
+--
+ALTER TABLE `inventory_management`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `keyword`
+--
+ALTER TABLE `keyword`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `management`
+--
+ALTER TABLE `management`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `order`
+--
+ALTER TABLE `order`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `order_discount`
+--
+ALTER TABLE `order_discount`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `order_items`
+--
+ALTER TABLE `order_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `order_shipment`
+--
+ALTER TABLE `order_shipment`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `product`
+--
+ALTER TABLE `product`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `product_discount`
+--
+ALTER TABLE `product_discount`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `product_inventory`
+--
+ALTER TABLE `product_inventory`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `product_tag`
+--
+ALTER TABLE `product_tag`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `regions`
+--
+ALTER TABLE `regions`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `shipment`
+--
+ALTER TABLE `shipment`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `tag`
+--
+ALTER TABLE `tag`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `tag_keyword`
+--
+ALTER TABLE `tag_keyword`
+  MODIFY `idtag_keyword` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `user`
+--
+ALTER TABLE `user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- 使用表AUTO_INCREMENT `user_address`
+--
+ALTER TABLE `user_address`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- 使用表AUTO_INCREMENT `user_payment`
+--
+ALTER TABLE `user_payment`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- 限制导出的表
