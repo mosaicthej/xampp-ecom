@@ -45,15 +45,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['context'])) {
                 if ($context == 'profile_picture') {
                     $username = $_SESSION['username'];
                     $sql = "UPDATE user SET pfp = ? WHERE username = ?";
-                    $redirect_page = '../dashboard.php';
-?> <script> console.log("uploaded image!"); </script> <?php
+                    $params = [$target_file, $username];
+                    $redirect_page = '../dashboard';
                 } elseif ($context == 'product_image') {
                     $product_id = $_POST['product_id'];
                     $sql = "UPDATE product SET image = ? WHERE id = ?";
-                    $redirect_page = '../product_detail.php?id=' . $product_id;
+                    $params = [$target_file, $product_id];
+                    $redirect_page = '../product';
                 }
-
-                $result = dbExecute($sql, [$target_file, $username]);
+                
+                $result = dbExecute($sql, $params);
+?> <script> console.log("uploaded image to <?php echo $target_file; ?>!"); </script> <?php
                 if ($result['success']) {
                     header('Location: ' . $redirect_page);
                 } else {

@@ -9,11 +9,10 @@ $productPrice = $_POST['productPrice'];
 $productImageUrl = $_POST['productImageUrl']; // Handle file upload and get the URL
 $productDescription = $_POST['productDescription'];
 
-$query = "INSERT INTO product (name, price, image, description) VALUES (:name, :price, :imageUrl, :description)";
+$query = "INSERT INTO product (name, price, description) VALUES (:name, :price, :description)";
 $params = [
     ':name' => $productName,
     ':price' => $productPrice,
-    ':imageUrl' => $productImageUrl,
     ':description' => $productDescription
 ];
 

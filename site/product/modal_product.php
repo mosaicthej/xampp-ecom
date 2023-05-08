@@ -25,10 +25,6 @@
                         <input type="number" step="0.01" class="form-control" id="productPrice" placeholder="Enter price" required>
                     </div>
                     <div class="form-group">
-                        <label for="productImage">Product Image:</label>
-                        <input type="file" class="form-control-file" id="productImage">
-                    </div>
-                    <div class="form-group">
                         <label for="productDescription">Product Description:</label>
                         <textarea class="form-control" id="productDescription" rows="3" placeholder="Enter product description"></textarea>
                     </div>

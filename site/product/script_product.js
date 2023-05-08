@@ -86,10 +86,10 @@ function filterProdByCategory(categoryId){
     fetch('./wrapper_product.php'.concat('?categoryID=', categoryId), {
             method: 'GET',
         }).then( (res) => {
-            console.log(res);
+            // console.log(res);
             return res.text();
         }).then( (text) => {    
-            console.log(text);
+            // console.log(text);
             document.getElementById('prod_wrapper').innerHTML = text;
         }, (err) => {
             console.log(err);
@@ -220,3 +220,15 @@ document.getElementById('deleteProductBtn').addEventListener('click', function()
         });
     }
 });
+
+function triggerFileInput(productId) {
+    const fileInput = document.getElementById(`product_img_Input-${productId}`);
+    fileInput.click();
+    console.log('triggered file input');
+}
+
+function handleImageInputChange(productId) {
+    console.log('handling image input change');
+    const form = document.getElementById(`productImgForm-${productId}`);
+    form.submit();
+}
