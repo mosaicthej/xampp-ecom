@@ -38,10 +38,7 @@ $page = 'category';
                         </form>
                     </div>
                     <div class="col-md-6">
-                        <h5>Categories</h5>
-                        <ul class="list-group" id="categoryList">
-                            <!-- Categories will be listed here -->
-                        </ul>
+                        <?php include './component_category_bar.php' ;?>
                     </div>
                 </div>
             </main>
